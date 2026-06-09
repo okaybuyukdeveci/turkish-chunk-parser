@@ -35,9 +35,13 @@ Bu proje, verilen bir Türkçe cümledeki isim öbeklerini (NP), eylem öbekleri
 pip install -r requirements.txt
 ```
 
-Veri seti (UD Turkish IMST Treebank):
+Veri setleri:
 ```bash
+# Eğitim verisi (IMST)
 git clone https://github.com/UniversalDependencies/UD_Turkish-IMST.git data/raw/
+
+# Test verisi (BOUN — bağımsız kaynak)
+git clone https://github.com/UniversalDependencies/UD_Turkish-BOUN.git data/boun/
 ```
 
 ## Kullanım
@@ -84,14 +88,18 @@ turkish-chunk-parser/
 
 ## Sonuçlar
 
-| Metrik | Değer |
-|--------|-------|
-| Micro F1 | 1.0000 |
-| Precision | 1.0000 |
-| Recall | 1.0000 |
-| Token Accuracy | 1.0000 |
+Eğitim: IMST Treebank | Test: BOUN Treebank (bağımsız kaynak)
 
-Detaylı sınıf bazında metrikler: `outputs/metrics_report.txt`
+| Sınıf | Precision | Recall | F1 |
+|-------|-----------|--------|----|
+| ADJP | 0.88 | 0.90 | 0.89 |
+| ADVP | 0.91 | 0.87 | 0.89 |
+| NP | 0.82 | 0.83 | 0.82 |
+| VP | 0.84 | 0.83 | 0.83 |
+| **Micro Avg** | **0.84** | **0.84** | **0.84** |
+| Token Accuracy | | | **0.91** |
+
+Detaylı metrikler ve grafikler: `outputs/` klasörü
 
 ## Gereksinimler
 

@@ -1,16 +1,16 @@
 === Chunk-Level Metrics (seqeval) ===
               precision    recall  f1-score   support
 
-        ADJP     1.0000    1.0000    1.0000       585
-        ADVP     1.0000    1.0000    1.0000       445
-          NP     1.0000    1.0000    1.0000      2307
-          VP     1.0000    1.0000    1.0000      2012
+        ADJP     0.8805    0.8990    0.8897       574
+        ADVP     0.9133    0.8689    0.8906       473
+          NP     0.8205    0.8292    0.8248      2927
+          VP     0.8403    0.8270    0.8336      2214
 
-   micro avg     1.0000    1.0000    1.0000      5349
-   macro avg     1.0000    1.0000    1.0000      5349
-weighted avg     1.0000    1.0000    1.0000      5349
+   micro avg     0.8399    0.8379    0.8389      6188
+   macro avg     0.8637    0.8560    0.8597      6188
+weighted avg     0.8402    0.8379    0.8390      6188
 
-Micro F1:     1.0000
-Precision:    1.0000
-Recall:       1.0000
-Token Acc.:   1.0000
+Micro F1:     0.8389
+Precision:    0.8399
+Recall:       0.8379
+Token Acc.:   0.9104

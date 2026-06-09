@@ -2,7 +2,7 @@ from typing import List, Dict, Tuple
 
 
 def word2features(sentence: List[Tuple], i: int) -> Dict:
-    form, upos, deprel = sentence[i][0], sentence[i][1], sentence[i][2]
+    form, upos = sentence[i][0], sentence[i][1]
     word = form.lower()
 
     features = {
@@ -17,12 +17,11 @@ def word2features(sentence: List[Tuple], i: int) -> Dict:
         "word.istitle": form.istitle(),
         "word.isdigit": word.isdigit(),
         "postag": upos,
-        "deprel": deprel,
     }
 
     # -2 komşu
     if i >= 2:
-        w2, pos2, dep2 = sentence[i-2][0], sentence[i-2][1], sentence[i-2][2]
+        w2, pos2 = sentence[i-2][0], sentence[i-2][1]
         features.update({
             "-2:word.lower": w2.lower(),
             "-2:postag": pos2,
@@ -33,31 +32,29 @@ def word2features(sentence: List[Tuple], i: int) -> Dict:
 
     # -1 komşu
     if i >= 1:
-        w1, pos1, dep1 = sentence[i-1][0], sentence[i-1][1], sentence[i-1][2]
+        w1, pos1 = sentence[i-1][0], sentence[i-1][1]
         features.update({
             "-1:word.lower": w1.lower(),
             "-1:postag": pos1,
             "-1:word[-3:]": w1.lower()[-3:],
-            "-1:deprel": dep1,
         })
     else:
         features["BOS"] = True
 
     # +1 komşu
     if i < len(sentence) - 1:
-        w1, pos1, dep1 = sentence[i+1][0], sentence[i+1][1], sentence[i+1][2]
+        w1, pos1 = sentence[i+1][0], sentence[i+1][1]
         features.update({
             "+1:word.lower": w1.lower(),
             "+1:postag": pos1,
             "+1:word[-3:]": w1.lower()[-3:],
-            "+1:deprel": dep1,
         })
     else:
         features["EOS"] = True
 
     # +2 komşu
     if i < len(sentence) - 2:
-        w2, pos2, dep2 = sentence[i+2][0], sentence[i+2][1], sentence[i+2][2]
+        w2, pos2 = sentence[i+2][0], sentence[i+2][1]
         features.update({
             "+2:word.lower": w2.lower(),
             "+2:postag": pos2,
