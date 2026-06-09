@@ -37,6 +37,64 @@ def evaluate(y_true: List[List[str]], y_pred: List[List[str]], report_path: str)
     return {"f1": f1, "precision": precision, "recall": recall, "accuracy": accuracy}
 
 
+def plot_metrics_per_class(y_true: List[List[str]], y_pred: List[List[str]], save_path: str) -> None:
+    from seqeval.metrics import classification_report as seqeval_report
+
+    report = seqeval_report(y_true, y_pred, digits=4, output_dict=True)
+
+    # Sadece sınıf satırlarını al (micro/macro/weighted avg hariç)
+    classes = [k for k in report if k not in ("micro avg", "macro avg", "weighted avg")]
+    classes = sorted(classes)
+
+    precision_vals = [report[c]["precision"] for c in classes]
+    recall_vals    = [report[c]["recall"]    for c in classes]
+    f1_vals        = [report[c]["f1-score"]  for c in classes]
+
+    x = np.arange(len(classes))
+    width = 0.25
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bars1 = ax.bar(x - width, precision_vals, width, label="Precision", color="#4C72B0")
+    bars2 = ax.bar(x,         recall_vals,    width, label="Recall",    color="#55A868")
+    bars3 = ax.bar(x + width, f1_vals,        width, label="F1-Score",  color="#C44E52")
+
+    ax.set_xlabel("Sınıf", fontsize=12)
+    ax.set_ylabel("Değer", fontsize=12)
+    ax.set_title("Sınıf Bazında Precision / Recall / F1-Score", fontsize=13)
+    ax.set_xticks(x)
+    ax.set_xticklabels(classes, fontsize=10)
+    ax.set_ylim(0, 1.12)
+    ax.legend(fontsize=10)
+    ax.yaxis.grid(True, linestyle="--", alpha=0.7)
+    ax.set_axisbelow(True)
+
+    for bar in [*bars1, *bars2, *bars3]:
+        h = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2, h + 0.01,
+                f"{h:.2f}", ha="center", va="bottom", fontsize=7)
+
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=150)
+    plt.close()
+    print(f"Metrik grafiği kaydedildi: {save_path}")
+
+
+def plot_accuracy_bar(accuracy: float, save_path: str) -> None:
+    fig, ax = plt.subplots(figsize=(4, 5))
+    bar = ax.bar(["Token Accuracy"], [accuracy], color="#8172B2", width=0.4)
+    ax.set_ylim(0, 1.15)
+    ax.set_ylabel("Değer", fontsize=12)
+    ax.set_title("Token-Level Accuracy", fontsize=13)
+    ax.yaxis.grid(True, linestyle="--", alpha=0.7)
+    ax.set_axisbelow(True)
+    ax.text(bar[0].get_x() + bar[0].get_width() / 2, accuracy + 0.02,
+            f"{accuracy:.4f}", ha="center", va="bottom", fontsize=12, fontweight="bold")
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=150)
+    plt.close()
+    print(f"Accuracy grafiği kaydedildi: {save_path}")
+
+
 def plot_confusion_matrix(y_true: List[List[str]], y_pred: List[List[str]], save_path: str) -> None:
     flat_true = [t for seq in y_true for t in seq]
     flat_pred = [t for seq in y_pred for t in seq]

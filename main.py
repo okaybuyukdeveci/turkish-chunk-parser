@@ -7,7 +7,7 @@ from data_loader import load_conllu
 from chunk_converter import convert_to_bio, write_conll
 from feature_extractor import sent2features, sent2labels
 from crf_model import train, predict, save
-from evaluator import evaluate, plot_confusion_matrix, write_predictions_conll
+from evaluator import evaluate, plot_confusion_matrix, plot_metrics_per_class, plot_accuracy_bar, write_predictions_conll
 
 RAW_DIR = os.path.join(os.path.dirname(__file__), "data", "raw")
 PROCESSED_DIR = os.path.join(os.path.dirname(__file__), "data", "processed")
@@ -55,7 +55,7 @@ def main():
     print("\n=== 5/5 Değerlendirme ===")
     y_pred = predict(crf, X_test)
 
-    evaluate(
+    metrics = evaluate(
         y_test,
         y_pred,
         report_path=os.path.join(OUTPUTS_DIR, "metrics_report.txt"),
@@ -64,6 +64,15 @@ def main():
         y_test,
         y_pred,
         save_path=os.path.join(OUTPUTS_DIR, "confusion_matrix.png"),
+    )
+    plot_metrics_per_class(
+        y_test,
+        y_pred,
+        save_path=os.path.join(OUTPUTS_DIR, "metrics_per_class.png"),
+    )
+    plot_accuracy_bar(
+        metrics["accuracy"],
+        save_path=os.path.join(OUTPUTS_DIR, "accuracy.png"),
     )
     write_predictions_conll(
         test_labeled,
