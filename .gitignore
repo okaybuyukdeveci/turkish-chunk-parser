@@ -1,0 +1,5 @@
+data/raw/
+outputs/crf_model.pkl
+__pycache__/
+*.pyc
+.idea/
